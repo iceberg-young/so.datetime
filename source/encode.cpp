@@ -29,8 +29,8 @@ namespace so {
         accrue(s, 12, 2, axes.tm_hour);
         accrue(s, 15, 2, axes.tm_min);
         accrue(s, 18, 2, axes.tm_sec);
-        auto ms = duration_cast<milliseconds>(clock.time_since_epoch());
-        accrue(s, 22, 3, (ms.count() % 1000 + 1000) % 1000);
+        auto ms = duration_cast<milliseconds>(clock.time_since_epoch()).count() % 1000;
+        accrue(s, 22, 3, ms < 0 ? 1000 + ms : ms);
         return s;
     }
 }
