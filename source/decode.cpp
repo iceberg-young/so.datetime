@@ -16,23 +16,22 @@ namespace so {
               iterator(iterator),
               axes({}) {
                 this->axes.tm_mday = 1;
+                this->from_year();
             }
 
         public:
-            bool digit(int& v) {
-                char n = *this->iterator;
-                if (n < '0' or n > '9') return false;
-
-                v *= 10;
-                v += n - '0';
-                ++this->iterator;
-                return true;
-            }
-
-            int pair() {
+            int digits(int count) {
                 int v = 0;
-                if (not (this->digit(v) and this->digit(v))) {
-                    throw datetime_decode_error{"A pair of digits ('0'...'9') is expected."};
+                for (int x = 0; x < count; ++x, ++this->iterator) {
+                    char n = *this->iterator;
+                    if (n < '0' or n > '9') {
+                        throw datetime_decode_error{
+                          std::to_string(count) + " digits are expected, "
+                            "but only have " + std::to_string(x) + '.'
+                        };
+                    }
+                    v *= 10;
+                    v += n - '0';
                 }
                 return v;
             }
@@ -41,61 +40,61 @@ namespace so {
                 char s = *this->iterator;
                 if (s == '+' or s == '-') {
                     ++this->iterator;
-                    return 0x44 - s;
+                    return ',' - s; // '+'(0x2B) ','(0x2C) '-'(0x2D)
                 }
                 throw datetime_decode_error{"Sign (+/-) or 'Z' is expected."};
             }
 
         public:
-            void from_tz() {
+            void from_timezone() {
                 if (*this->iterator == 'Z') {
                     ++this->iterator;
                     return;
                 }
                 int sign = this->sign();
-                auto offset = this->pair() * 60;
+                auto offset = this->digits(2) * 60;
                 if (*this->iterator == ':') {
                     ++this->iterator;
                 }
-                offset += this->pair();
+                offset += this->digits(2);
                 this->axes.tm_yday = sign * offset;
             }
 
             void from_second() {
-                this->axes.tm_sec = this->pair();
+                this->axes.tm_sec = this->digits(2);
                 if (*this->iterator == '.') {
-                    char c = *++this->iterator;
-                    if (c < '0' or c > '9') {
-                        throw datetime_decode_error{"At least 1 digit is required since fraction (.) presented."};
+                    char n = *++this->iterator;
+                    if (n < '0' or n > '9') {
+                        throw datetime_decode_error{"At least 1 digit is expected since fraction (.) presented."};
                     }
-                    int b = 100;
-                    int f = 0;
+                    int power = 100;
+                    int fraction = 0;
                     do {
-                        f += (c - '0') * b;
-                        b /= 10;
-                        c = *++this->iterator;
+                        fraction += (n - '0') * power;
+                        power /= 10;
+                        n = *++this->iterator;
                     }
-                    while (c >= '0' and c <= '9');
-                    this->axes.tm_wday = f;
+                    while (n >= '0' and n <= '9');
+                    this->axes.tm_wday = fraction;
                 }
             }
 
             void from_minute() {
-                this->axes.tm_hour = this->pair();
+                this->axes.tm_hour = this->digits(2);
                 if (*this->iterator != ':') {
                     throw datetime_decode_error{"Separator (:) is expected between hour and minute."};
                 }
                 ++this->iterator;
-                this->axes.tm_min = this->pair();
+                this->axes.tm_min = this->digits(2);
                 if (*this->iterator == ':') {
                     ++this->iterator;
                     this->from_second();
                 }
-                this->from_tz();
+                this->from_timezone();
             }
 
             void from_day() {
-                this->axes.tm_mday = this->pair();
+                this->axes.tm_mday = this->digits(2);
                 if (*this->iterator == 'T') {
                     ++this->iterator;
                     this->from_minute();
@@ -103,7 +102,7 @@ namespace so {
             }
 
             void from_month() {
-                this->axes.tm_mon = this->pair() - 1;
+                this->axes.tm_mon = this->digits(2) - 1;
                 if (*this->iterator == '-') {
                     ++this->iterator;
                     this->from_day();
@@ -111,8 +110,7 @@ namespace so {
             }
 
             void from_year() {
-                this->axes.tm_year = this->pair() * 100 - 1900;
-                this->axes.tm_year += this->pair();
+                this->axes.tm_year = this->digits(4) - 1900;
                 if (*this->iterator == '-') {
                     ++this->iterator;
                     this->from_month();
@@ -128,7 +126,6 @@ namespace so {
 
     system_clock::time_point stotp(segment::literal_t& datetime) {
         segment s{datetime};
-        s.from_year();
         milliseconds ms{s.axes.tm_wday};
         auto offset = s.axes.tm_yday * 60;
         auto t = mktime(&s.axes) - offset;
