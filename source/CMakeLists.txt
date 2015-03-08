@@ -4,8 +4,8 @@ project(so.datetime)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
 set(SOURCE_FILES
-    decode.cpp
-    encode.cpp
+    datetime.cpp
+    datetime_parser.cpp
 )
 
 add_library(so.datetime STATIC ${SOURCE_FILES})

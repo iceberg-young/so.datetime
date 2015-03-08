@@ -1,9 +1,4 @@
-#include "iostream"
-#include "datetime.hpp"
-
-using std::chrono::system_clock;
-using std::chrono::milliseconds;
-using std::chrono::duration_cast;
+#include "datetime_parser.hpp"
 
 namespace so {
     namespace {
@@ -14,6 +9,8 @@ namespace so {
             }
         }
     }
+
+    using std::chrono::system_clock;
 
     std::string to_string(const system_clock::time_point& clock) {
         tm axes;
@@ -29,8 +26,16 @@ namespace so {
         accrue(s, 12, 2, axes.tm_hour);
         accrue(s, 15, 2, axes.tm_min);
         accrue(s, 18, 2, axes.tm_sec);
-        auto ms = duration_cast<milliseconds>(clock.time_since_epoch()).count() % 1000;
-        accrue(s, 22, 3, ms < 0 ? 1000 + ms : ms);
+        auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(clock.time_since_epoch()).count() % 1000;
+        accrue(s, 22, 3, ms < 0 ? ms + 1000 : ms);
         return s;
+    }
+
+    system_clock::time_point stotp(datetime_parser::literal_t& datetime) {
+        datetime_parser parser{datetime};
+        std::chrono::milliseconds ms{parser.tm_wday};
+        auto offset = parser.tm_yday * 60;
+        auto t = mktime(&parser) - offset;
+        return system_clock::from_time_t(t + parser.tm_gmtoff) + ms;
     }
 }

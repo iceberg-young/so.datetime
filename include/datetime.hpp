@@ -15,11 +15,11 @@ namespace so {
         return stotp(i);
     }
 
-    class datetime_decode_error :
+    class datetime_parse_error :
       public std::domain_error
     {
     public:
-        datetime_decode_error(const std::string& what) :
+        datetime_parse_error(const std::string& what) :
           domain_error(what) {
         }
     };
