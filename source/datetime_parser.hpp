@@ -1,17 +1,35 @@
 #ifndef INCLUDE_SO_DATETIME_PARSER_ONCE_FLAG
 #define INCLUDE_SO_DATETIME_PARSER_ONCE_FLAG
 
+#include <limits>
 #include "datetime.hpp"
 
 namespace so {
     class datetime_parser :
       public tm
     {
-    public:
-        using literal_t = std::string::const_iterator;
+        /** Embezzled Members:
+        * tm_wday: hours of timezone offset
+        * tm_yday: minutes of timezone offset
+        * tm_gmtoff: nanoseconds
+        * tm_zone: string pointer to be parsed
+        */
+        static_assert(
+          std::numeric_limits<decltype(tm::tm_gmtoff)>::max() >= std::nano::den,
+          "*tm_gmtoff* should be able to hold a nanosecond (999'999'999)."
+        );
 
     public:
-        datetime_parser(literal_t& iterator);
+        datetime_parser(const char* begin);
+
+    public:
+        long gmt_offset() {
+            return this->tm_wday * 60 + this->tm_yday;
+        }
+
+        decltype(tm::tm_gmtoff) nanoseconds() {
+            return this->tm_gmtoff;
+        }
 
     protected:
         int digits(int count);
@@ -28,9 +46,6 @@ namespace so {
         void from_second();
 
         void from_timezone();
-
-    private:
-        literal_t& iterator;
     };
 }
 

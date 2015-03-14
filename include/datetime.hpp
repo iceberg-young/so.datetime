@@ -6,14 +6,28 @@
 #include <stdexcept>
 
 namespace so {
-    std::string to_string(const std::chrono::system_clock::time_point& clock);
+    using time_point = std::chrono::system_clock::time_point;
 
-    std::chrono::system_clock::time_point stotp(typename std::string::const_iterator& datetime);
+    std::string to_string(const time_point& time);
 
-    inline std::chrono::system_clock::time_point stotp(const std::string& datetime) {
-        auto i = datetime.begin();
-        return stotp(i);
-    }
+    std::string to_string(const timespec& time);
+
+    class datetime :
+      public timespec
+    {
+    public:
+        static datetime now();
+
+    public:
+        datetime(const std::string& w3dt);
+
+        datetime(const timespec& ts) :
+          timespec(ts) {
+        }
+
+    public:
+        operator time_point();
+    };
 
     class datetime_parse_error :
       public std::domain_error

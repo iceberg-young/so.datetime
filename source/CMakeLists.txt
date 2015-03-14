@@ -6,6 +6,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
 set(SOURCE_FILES
     datetime.cpp
     datetime_parser.cpp
+    string.cpp
 )
 
 add_library(so.datetime STATIC ${SOURCE_FILES})
