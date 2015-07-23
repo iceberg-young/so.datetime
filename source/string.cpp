@@ -15,17 +15,20 @@ namespace so {
         if (not std::is_same<decltype(duration), std::chrono::nanoseconds>::value) {
             duration = std::chrono::duration_cast<std::chrono::nanoseconds>(duration);
         }
-        auto ns = duration.count();
-        return to_string(timespec{
-          std::chrono::system_clock::to_time_t(time),
-          ns >= 0 ? ns : ns + std::nano::den
-        });
+        auto ns = duration.count() % std::nano::den;
+        timespec ts{std::chrono::system_clock::to_time_t(time), ns};
+        if (ns < 0) {
+            ts.tv_sec -= 1;
+            ts.tv_nsec += std::nano::den;
+        }
+        return to_string(ts);
     }
 
     std::string to_string(const timespec& time) {
         tm axes;
         gmtime_r(&time.tv_sec, &axes);
         std::string s{
+          //          111111111 222
           //123456789 123456789 123
           "0000-00-00T00:00:00.000Z"
         };

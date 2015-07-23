@@ -13,29 +13,25 @@ namespace so {
     std::string to_string(const timespec& time);
 
     class datetime :
-      public timespec
-    {
-    public:
+      public timespec {
+     public:
         static datetime now();
 
-    public:
+     public:
         datetime(const std::string& w3dt);
 
         datetime(const timespec& ts) :
-          timespec(ts) {
-        }
+          timespec(ts) {}
 
-    public:
+     public:
         operator time_point();
     };
 
     class datetime_parse_error :
-      public std::domain_error
-    {
-    public:
+      public std::domain_error {
+     public:
         datetime_parse_error(const std::string& what) :
-          domain_error(what) {
-        }
+          domain_error(what) {}
     };
 }
 

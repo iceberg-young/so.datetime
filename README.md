@@ -1,7 +1,25 @@
 so.datetime
 ===========
 
-Convert from/to date-time string as described in [W3 profile][w3cdt].
+Convert from/to a [W3 profile][w3cdt] described date-time string.
+
+E.g.
+
+```cpp
+std::cout << so::to_string(std::chrono::system_clock::now());
+```
+> ```
+> 2015-07-23T15:15:15.080Z
+> ```
+
+```cpp
+auto t = (so::time_point) so::datetime{"1970-01-01T00:00:01.666Z"};
+t -= std::chrono::milliseconds{3600};
+std::cout << so::to_string(t);
+```
+> ```
+> 1969-12-31T23:59:58.066Z
+> ```
 
 
 License

@@ -1,13 +1,12 @@
 #ifndef INCLUDE_SO_DATETIME_PARSER_ONCE_FLAG
 #define INCLUDE_SO_DATETIME_PARSER_ONCE_FLAG
 
-#include <limits>
 #include "datetime.hpp"
+#include <limits>
 
 namespace so {
     class datetime_parser :
-      public tm
-    {
+      public tm {
         /** Embezzled Members:
         * tm_wday: hours of timezone offset
         * tm_yday: minutes of timezone offset
@@ -19,10 +18,10 @@ namespace so {
           "*tm_gmtoff* should be able to hold a nanosecond (999'999'999)."
         );
 
-    public:
+     public:
         datetime_parser(const char* begin);
 
-    public:
+     public:
         long gmt_offset() {
             return this->tm_wday * 60 + this->tm_yday;
         }
@@ -31,10 +30,10 @@ namespace so {
             return this->tm_gmtoff;
         }
 
-    protected:
+     protected:
         int digits(int count);
 
-    protected:
+     protected:
         void from_year();
 
         void from_month();

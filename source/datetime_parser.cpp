@@ -51,7 +51,9 @@ namespace so {
     void datetime_parser::from_minute() {
         this->tm_hour = this->digits(2);
         if (*this->tm_zone != ':') {
-            throw datetime_parse_error{"Separator (:) is expected between hour and minute."};
+            throw datetime_parse_error{
+              "Separator (:) is expected between hour and minute."
+            };
         }
         ++this->tm_zone;
         this->tm_min = this->digits(2);
@@ -67,7 +69,9 @@ namespace so {
         if (*this->tm_zone == '.') {
             char n = *++this->tm_zone;
             if (n < '0' or n > '9') {
-                throw datetime_parse_error{"At least 1 digit is expected since fraction (.) presented."};
+                throw datetime_parse_error{
+                  "At least 1 digit is expected since fraction (.) presented."
+                };
             }
             auto power = std::nano::den;
             do {
