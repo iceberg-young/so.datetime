@@ -6,7 +6,7 @@ Convert from/to a [W3 profile][w3cdt] described date-time string.
 E.g.
 
 ```cpp
-std::cout << so::to_string(std::chrono::system_clock::now());
+std::cout << so::to_string(so::datetime::now());
 ```
 > ```
 > 2015-07-23T15:15:15.080Z
