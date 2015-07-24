@@ -1,25 +1,52 @@
 so.datetime
 ===========
 
-Convert from/to a [W3 profile][w3cdt] described date-time string.
+Convert from/to a [W3 profile][w3dt] described date-time string.
 
-E.g.
+Two system types are borrowed and enhanced by this library.
 
-```cpp
-std::cout << so::to_string(so::datetime::now());
-```
-> ```
-> 2015-07-23T15:15:15.080Z
-> ```
+- `timespec`
+  The public base of `so::datetime`.
 
-```cpp
-auto t = (so::time_point) so::datetime{"1970-01-01T00:00:01.666Z"};
-t -= std::chrono::milliseconds{3600};
-std::cout << so::to_string(t);
-```
-> ```
-> 1969-12-31T23:59:58.066Z
-> ```
+  Easy to convert from/to various date-time representations.
+
+- `std::chrono::system_clock::time_point`
+  Aliased to `so::time_point`.
+
+  Easy to do duration operation.
+
+
+API
+---
+
+See [datetime.hpp](include/datetime.hpp)
+
+- Construct from W3 date-time string. E.g.
+
+  ```cpp
+  so::datetime epoch{"1970-01-01T00:00:00.000Z"};
+  ```
+
+- Covert to W3 date-time string.
+
+  ```cpp
+  so::to_string(timespec)
+  so::to_string(so::time_point)
+  ```
+
+- Construct from and cast to system types.
+
+  ```cpp
+  so::datetime::datetime(timespec)
+  so::datetime::datetime(so::time_point)
+  ```
+
+  ```cpp
+  so::datetime::operator time_point()
+  ```
+
+  > **Tip!**
+  > Casting `so::datetime` to public base `timespec` is an implicit operation.
 
 
 License
@@ -44,7 +71,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ---
 
-[w3cdt]: http://www.w3.org/TR/NOTE-datetime
+[w3dt]: http://www.w3.org/TR/NOTE-datetime
 "Date and Time Formats"
 
 [LGPLv3]: http://www.gnu.org/graphics/lgplv3-88x31.png

@@ -10,20 +10,6 @@ namespace so {
         }
     }
 
-    std::string to_string(const time_point& time) {
-        auto duration = time.time_since_epoch();
-        if (not std::is_same<decltype(duration), std::chrono::nanoseconds>::value) {
-            duration = std::chrono::duration_cast<std::chrono::nanoseconds>(duration);
-        }
-        auto ns = duration.count() % std::nano::den;
-        timespec ts{std::chrono::system_clock::to_time_t(time), ns};
-        if (ns < 0) {
-            ts.tv_sec -= 1;
-            ts.tv_nsec += std::nano::den;
-        }
-        return to_string(ts);
-    }
-
     std::string to_string(const timespec& time) {
         tm axes;
         gmtime_r(&time.tv_sec, &axes);
