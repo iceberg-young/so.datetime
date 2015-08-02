@@ -1,5 +1,8 @@
-#ifndef INCLUDE_SO_DATETIME_PARSER_ONCE_FLAG
-#define INCLUDE_SO_DATETIME_PARSER_ONCE_FLAG
+/**
+ * @copyright 2015 Iceberg YOUNG
+ * @license GNU Lesser General Public License version 3
+ */
+#pragma once
 
 #include "datetime.hpp"
 #include <limits>
@@ -47,5 +50,3 @@ namespace so {
         void from_timezone();
     };
 }
-
-#endif//INCLUDE_SO_DATETIME_ONCE_FLAG

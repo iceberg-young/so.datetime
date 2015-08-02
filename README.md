@@ -19,7 +19,7 @@ Two system types are borrowed and enhanced by this library.
 API
 ---
 
-See [datetime.hpp](include/datetime.hpp)
+See [datetime.hpp](include/datetime.hpp).
 
 - Construct from W3 date-time string. E.g.
 
