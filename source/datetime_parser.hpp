@@ -11,11 +11,12 @@ namespace so {
     class datetime_parser :
       public tm {
         /** Embezzled Members:
-        * tm_wday: hours of timezone offset
-        * tm_yday: minutes of timezone offset
-        * tm_gmtoff: nanoseconds
-        * tm_zone: string pointer to be parsed
-        */
+         * tm_wday: hour part of timezone offset
+         * tm_yday: minute part of timezone offset
+         * tm_isdst: sign part of timezone offset
+         * tm_gmtoff: nanoseconds
+         * tm_zone: string pointer to be parsed
+         */
         static_assert(
           std::numeric_limits<decltype(tm::tm_gmtoff)>::max() >= std::nano::den,
           "*tm_gmtoff* should be able to hold a nanosecond (999'999'999)."
@@ -26,7 +27,7 @@ namespace so {
 
      public:
         long gmt_offset() {
-            return this->tm_wday * 60 + this->tm_yday;
+            return this->tm_isdst * (this->tm_wday * 60 + this->tm_yday);
         }
 
         decltype(tm::tm_gmtoff) nanoseconds() {

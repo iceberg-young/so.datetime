@@ -97,12 +97,12 @@ namespace so {
         if (s != '+' and s != '-') {
             throw datetime_parse_error{"Sign (+/-) or 'Z' is expected."};
         }
-        int sign = ',' - s; // '+'(0x2B) ','(0x2C) '-'(0x2D)
+        this->tm_isdst = ',' - s; // '+'(0x2B) ','(0x2C) '-'(0x2D)
         ++this->tm_zone;
-        this->tm_wday = sign * this->digits(2);
+        this->tm_wday = this->digits(2);
         if (*this->tm_zone == ':') {
             ++this->tm_zone;
         }
-        this->tm_yday = sign * this->digits(2);
+        this->tm_yday = this->digits(2);
     }
 }

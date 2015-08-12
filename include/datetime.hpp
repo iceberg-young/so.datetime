@@ -34,6 +34,14 @@ namespace so {
         return to_string(datetime{tp});
     }
 
+    template<typename rep_t, typename period_t>
+    std::string to_string(const std::chrono::duration<rep_t, period_t>& duration) {
+        return to_string(std::chrono::duration_cast<std::chrono::milliseconds>(duration));
+    }
+
+    template<>
+    std::string to_string(const std::chrono::milliseconds& ms);
+
     class datetime_parse_error :
       public std::domain_error {
      public:

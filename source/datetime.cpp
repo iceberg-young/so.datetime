@@ -16,8 +16,7 @@ namespace so {
         datetime_parser parser{w3dt.c_str()};
         this->tv_nsec = parser.nanoseconds();
         auto offset = parser.gmt_offset() * 60;
-        this->tv_sec = mktime(&parser) - offset;
-        this->tv_sec += parser.tm_gmtoff;
+        this->tv_sec = timegm(&parser) - offset;
     }
 
     datetime::datetime(const time_point& tp) {

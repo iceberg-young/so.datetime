@@ -13,6 +13,13 @@ namespace so {
                 if ((v /= 10) <= 0) break;
             }
         }
+
+        bool append(std::string& s, long& c, int u, char d) {
+            if (int v = c / u) {
+                (s += std::to_string(v)) += d;
+            }
+            return not (c %= u);
+        }
     }
 
     std::string to_string(const timespec& time) {
@@ -31,5 +38,23 @@ namespace so {
         accrue(s, 18, 2, axes.tm_sec);
         accrue(s, 22, 3, int(time.tv_nsec / 1000000));
         return s;
+    }
+
+    template<>
+    std::string to_string(const std::chrono::milliseconds& ms) {
+        auto c = std::abs(ms.count());
+        std::string p{c != ms.count() ? "-P" : "P"};
+        if (!ms.count()) return p += "0D";
+        if (append(p, c, 86400000, 'D')) return p;
+        p += 'T';
+        if (append(p, c, 3600000, 'H')) return p;
+        if (append(p, c, 60000, 'M')) return p;
+        p += std::to_string(c / 1000);
+        if (c %= 1000) {
+            char fraction[sizeof(".000")];
+            snprintf(fraction, sizeof(fraction), ".%03ld", c);
+            p += fraction;
+        }
+        return p += 'S';
     }
 }
