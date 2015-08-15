@@ -50,19 +50,19 @@ See [datetime.hpp](include/datetime.hpp).
 - Covert to W3 date-time string.
 
   ```cpp
-  so::to_string(timespec)
-  so::to_string(so::time_point)
+  std::string  so::to_string(timespec);
+  std::string  so::to_string(so::time_point);
   ```
 
 - Construct from and cast to system types.
 
   ```cpp
-  so::datetime::datetime(timespec)
-  so::datetime::datetime(so::time_point)
+  so::datetime::datetime(timespec);
+  so::datetime::datetime(so::time_point);
   ```
 
   ```cpp
-  so::datetime::operator time_point()
+  so::datetime::operator time_point();
   ```
 
   > **Tip!**
@@ -74,7 +74,7 @@ See [datetime.hpp](include/datetime.hpp).
 
   ```cpp
   template<typename rep_t, typename period_t>
-  so::to_string(std::chrono::duration<rep_t, period_t>) -> std::string
+  std::string  so::to_string(std::chrono::duration<rep_t, period_t>);
   ```
 
   > **Tip!**
