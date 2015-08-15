@@ -27,7 +27,7 @@ This library employs `timegm` instead of `mktime`.
 > its function cannot be completely emulated using the standard functions
 > described above.
 >
->  -- *[FreeBSD 11.0 - man page for timegm][timegm]*
+>  -- *[FreeBSD - man page for timegm][timegm]*
 
 At least, it is available on BSD (Free/Net/Open- now; as it was introduced there),
 and systems which have [Glibc] available.
@@ -74,7 +74,7 @@ See [datetime.hpp](include/datetime.hpp).
 
   ```cpp
   template<typename rep_t, typename period_t>
-  std::string to_string(std::chrono::duration<rep_t, period_t>)
+  so::to_string(std::chrono::duration<rep_t, period_t>) -> std::string
   ```
 
   > **Tip!**
@@ -119,7 +119,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 "Date and Time Formats"
 
 [timegm]: http://www.unix.com/man-page/freebsd/3/timegm/
-"FreeBSD 11.0 - man page for timegm"
+"FreeBSD - man page for timegm"
 
 [Glibc]: http://www.gnu.org/software/gnulib/manual/html_node/timegm.html
 "Portability problems fixed by Gnulib"
