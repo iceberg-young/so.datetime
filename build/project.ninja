@@ -2,23 +2,19 @@
 
 ar = gcc-ar-5
 gcc = g++-5
-
-builddir = ../product/.midway
 includes = -I ../include
-libraries =
-version = 1.0.0
 
 include rules.ninja
 
-build $builddir/source/datetime.o: compile ../source/datetime.cpp
-build $builddir/source/datetime_parser.o: compile ../source/datetime_parser.cpp
-build $builddir/source/string.o: compile ../source/string.cpp
-build $builddir/suit.o: compile ../suit.cpp
+build .midway/source/datetime.o: compile ../source/datetime.cpp
+build .midway/source/datetime_parser.o: compile ../source/datetime_parser.cpp
+build .midway/source/string.o: compile ../source/string.cpp
+build .midway/suit.o: compile ../suit.cpp
 
-build ../product/so.datetime.a: archive $
-  $builddir/source/datetime.o $
-  $builddir/source/datetime_parser.o $
-  $builddir/source/string.o
-build ../product/so.datetime: program $
-  $builddir/suit.o $
-  ../product/so.datetime.a
+build lib/so.datetime.a: archive $
+  .midway/source/datetime.o $
+  .midway/source/datetime_parser.o $
+  .midway/source/string.o
+build bin/dummy: program $
+  .midway/suit.o $
+  lib/so.datetime.a

@@ -12,7 +12,7 @@
 			"isBuildCommand": true
 		},
 		{
-			"taskName": "product/so.datetime",
+			"taskName": "build/bin/dummy",
 			"isTestCommand": true
 		}
 	]
