@@ -1,0 +1,28 @@
+{
+	"name": "so.datetime",
+	"version": "1.0.0",
+	"license": "LGPL-3.0",
+	"author": "Iceberg YOUNG <iceberg.young@gmail.com>",
+	"keywords": [
+		"datetime",
+		"W3 profile"
+	],
+	"main": "$.a",
+	"provides": {
+		"$.a": {
+			"type": "lib",
+			"rule": "archive",
+			"source": {
+				"source/*.cpp": "compile"
+			}
+		}
+	},
+	"tests": {
+		"suit": {
+			"rule": "program",
+			"source": {
+				"suit.cpp": "compile"
+			}
+		}
+	}
+}
