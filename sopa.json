@@ -7,9 +7,9 @@
 		"datetime",
 		"W3 profile"
 	],
-	"main": "$.a",
 	"provides": {
-		"$.a": {
+		"^": "include",
+		"$": {
 			"type": "lib",
 			"rule": "archive",
 			"source": {
@@ -19,7 +19,6 @@
 	},
 	"tests": {
 		"suit": {
-			"rule": "program",
 			"source": {
 				"suit.cpp": "compile"
 			}

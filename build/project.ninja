@@ -4,17 +4,17 @@ ar = gcc-ar-5
 gcc = g++-5
 includes = -I ../include
 
-include rules.ninja
-
+# provide [so.datetime]
 build .midway/source/datetime.o: compile ../source/datetime.cpp
 build .midway/source/datetime_parser.o: compile ../source/datetime_parser.cpp
 build .midway/source/string.o: compile ../source/string.cpp
-build .midway/suit.o: compile ../suit.cpp
-
 build lib/so.datetime.a: archive $
   .midway/source/datetime.o $
   .midway/source/datetime_parser.o $
   .midway/source/string.o
+
+# tests [suit]
+build .midway/suit.o: compile ../suit.cpp
 build bin/dummy: program $
   .midway/suit.o $
   lib/so.datetime.a
